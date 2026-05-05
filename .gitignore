@@ -24,6 +24,16 @@
 .DS_Store
 *.pem
 
+# macOS
+.Spotlight-V100
+.Trashes
+.fseventsd
+.AppleDouble
+.LSOverride
+._*
+.DocumentRevisions-V100
+.TemporaryItems
+
 # debug
 npm-debug.log*
 yarn-debug.log*
