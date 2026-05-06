@@ -45,3 +45,20 @@ body {
   color: var(--foreground);
   font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
 }
+
+@keyframes tesseract-spin {
+  from { transform: rotateY(0deg) rotateX(10deg); }
+  to   { transform: rotateY(360deg) rotateX(10deg); }
+}
+
+.tesseract-spin {
+  animation: tesseract-spin 25s linear infinite;
+  will-change: transform;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .tesseract-spin {
+    animation: none;
+    transform: rotateY(15deg) rotateX(10deg);
+  }
+}

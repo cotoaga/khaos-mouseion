@@ -2,6 +2,7 @@
 
 import { useState, useEffect, useMemo, useCallback } from 'react';
 import Link from 'next/link';
+import Tesseract from '@/components/Tesseract';
 
 interface Book {
   title: string;
@@ -135,8 +136,12 @@ export default function PinakesView() {
   ];
 
   return (
-    <div style={{ background: 'var(--brand-surface)', minHeight: '100vh', padding: '32px 24px', fontFamily: 'var(--font-inter)' }}>
-      <div style={{ maxWidth: 1400, margin: '0 auto' }}>
+    <div style={{ background: 'var(--brand-surface)', minHeight: '100vh', padding: '32px 24px', fontFamily: 'var(--font-inter)', position: 'relative' }}>
+      {/* Ambient tesseract — fixed top-right, non-interactive */}
+      <div style={{ position: 'fixed', top: 16, right: 16, width: '28vh', height: '28vh', maxWidth: 240, maxHeight: 240, opacity: 0.09, pointerEvents: 'none', perspective: '600px', zIndex: 0 }}>
+        <Tesseract size="100%" stroke="var(--brand-primary)" strokeWidth={1} className="tesseract-spin" style={{ display: 'block' }} />
+      </div>
+      <div style={{ maxWidth: 1400, margin: '0 auto', position: 'relative', zIndex: 1 }}>
 
         {/* Header */}
         <div style={{ marginBottom: 24 }}>

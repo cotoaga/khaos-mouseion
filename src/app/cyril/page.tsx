@@ -65,6 +65,11 @@ export default function CyrilPage() {
           </table>
         </div>
 
+        {/* Crater caption */}
+        <p style={{ marginTop: 48, fontSize: 13, color: 'var(--brand-text-secondary)', fontFamily: 'var(--font-inter)' }}>
+          Insufficient dimensions to render.
+        </p>
+
       </div>
     </div>
   );

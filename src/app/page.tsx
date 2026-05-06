@@ -1,9 +1,28 @@
 import Link from "next/link";
+import Tesseract from "@/components/Tesseract";
 
 export default function Home() {
   return (
-    <main className="flex-1 flex flex-col items-center justify-center px-6 py-24 text-center">
-      <header className="mb-16">
+    <main className="flex-1 flex flex-col items-center justify-center px-6 py-16 text-center">
+      {/* Hero tesseract */}
+      <div
+        style={{
+          perspective: "800px",
+          marginBottom: "2rem",
+          width: "min(55vh, 480px)",
+          height: "min(55vh, 480px)",
+        }}
+      >
+        <Tesseract
+          size="100%"
+          stroke="var(--green)"
+          strokeWidth={1.5}
+          className="tesseract-spin"
+          style={{ display: "block" }}
+        />
+      </div>
+
+      <header className="mb-12">
         <h1
           className="text-5xl md:text-7xl font-bold uppercase mb-4"
           style={{
