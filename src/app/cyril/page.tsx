@@ -1,5 +1,7 @@
 'use client';
 
+import Link from 'next/link';
+
 function lastSunday(): string {
   const d = new Date();
   d.setDate(d.getDate() - d.getDay()); // getDay() === 0 on Sunday → stays today
@@ -25,7 +27,7 @@ export default function CyrilPage() {
 
         {/* Header */}
         <div style={{ marginBottom: 24 }}>
-          <div style={{ fontSize: 12, color: 'var(--brand-text-secondary)', letterSpacing: '0.1em', fontFamily: 'var(--font-space-grotesk)', textTransform: 'uppercase' }}>KHAOS-MOUSEION</div>
+          <Link href="/" style={{ fontSize: 12, color: 'var(--brand-text-secondary)', letterSpacing: '0.1em', textDecoration: 'none', fontFamily: 'var(--font-space-grotesk)', textTransform: 'uppercase' }}>← KHAOS-MOUSEION</Link>
           <h1 style={{ fontFamily: 'var(--font-space-grotesk)', fontSize: 36, fontWeight: 700, color: 'var(--brand-hero-color)', letterSpacing: '0.1em', textTransform: 'uppercase', margin: '8px 0 0' }}>CYRIL</h1>
         </div>
 
