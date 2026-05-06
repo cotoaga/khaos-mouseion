@@ -27,6 +27,19 @@
   --color-grey-light: var(--grey-light);
 }
 
+/* Light theme — Pinakes / Cyril catalog */
+:root {
+  --brand-primary: #00A86B;
+  --brand-accent: #0088FF;
+  --brand-hero-color: #0088FF;
+  --brand-surface: #FAFBFB;
+  --brand-border: #E0E0E0;
+  --brand-text-body: #2D2D2D;
+  --brand-text-secondary: #4A4A4A;
+  --brand-tint-bg: rgba(0, 168, 107, 0.05);
+  --brand-hover-shadow: 0 4px 16px rgba(0, 168, 107, 0.1);
+}
+
 body {
   background: var(--background);
   color: var(--foreground);
