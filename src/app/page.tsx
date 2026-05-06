@@ -33,7 +33,7 @@ export default function Home() {
 
       <div className="flex flex-col sm:flex-row gap-6">
         <Link
-          href="/collection"
+          href="/pinakes"
           className="px-10 py-4 text-lg font-semibold uppercase tracking-widest transition-opacity hover:opacity-80"
           style={{
             fontFamily: "var(--font-space-grotesk)",
@@ -45,7 +45,7 @@ export default function Home() {
         </Link>
 
         <Link
-          href="/collection"
+          href="/cyril"
           className="px-10 py-4 text-lg font-semibold uppercase tracking-widest transition-opacity hover:opacity-80"
           style={{
             fontFamily: "var(--font-space-grotesk)",
