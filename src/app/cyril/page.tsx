@@ -1,6 +1,7 @@
 'use client';
 
 import Link from 'next/link';
+import Tesseract from '@/components/Tesseract';
 
 function lastSunday(): string {
   const d = new Date();
@@ -28,7 +29,10 @@ export default function CyrilPage() {
         {/* Header */}
         <div style={{ marginBottom: 24 }}>
           <Link href="/" style={{ fontSize: 12, color: 'var(--brand-text-secondary)', letterSpacing: '0.1em', textDecoration: 'none', fontFamily: 'var(--font-space-grotesk)', textTransform: 'uppercase' }}>← KHAOS-MOUSEION</Link>
-          <h1 style={{ fontFamily: 'var(--font-space-grotesk)', fontSize: 36, fontWeight: 700, color: 'var(--brand-hero-color)', letterSpacing: '0.1em', textTransform: 'uppercase', margin: '8px 0 0' }}>CYRIL</h1>
+          <div style={{ display: 'flex', alignItems: 'center', gap: 12, margin: '8px 0 0' }}>
+            <Tesseract size={44} stroke="var(--brand-hero-color)" strokeWidth={1.5} />
+            <h1 style={{ fontFamily: 'var(--font-space-grotesk)', fontSize: 36, fontWeight: 700, color: 'var(--brand-hero-color)', letterSpacing: '0.1em', textTransform: 'uppercase', margin: 0 }}>CYRIL</h1>
+          </div>
         </div>
 
         {/* Summary Strip */}

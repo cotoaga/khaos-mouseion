@@ -41,13 +41,13 @@ export default function Tesseract({
       style={style}
     >
       {cubeEdges.map(([a, b], i) => (
-        <line key={`o${i}`} x1={outer[a][0]} y1={outer[a][1]} x2={outer[b][0]} y2={outer[b][1]} stroke={stroke} strokeWidth={strokeWidth} />
+        <line key={`o${i}`} x1={outer[a][0]} y1={outer[a][1]} x2={outer[b][0]} y2={outer[b][1]} stroke={stroke} strokeWidth={strokeWidth} vectorEffect="non-scaling-stroke" />
       ))}
       {cubeEdges.map(([a, b], i) => (
-        <line key={`n${i}`} x1={inner[a][0]} y1={inner[a][1]} x2={inner[b][0]} y2={inner[b][1]} stroke={stroke} strokeWidth={strokeWidth} />
+        <line key={`n${i}`} x1={inner[a][0]} y1={inner[a][1]} x2={inner[b][0]} y2={inner[b][1]} stroke={stroke} strokeWidth={strokeWidth} vectorEffect="non-scaling-stroke" />
       ))}
       {outer.map(([ox, oy], i) => (
-        <line key={`c${i}`} x1={ox} y1={oy} x2={inner[i][0]} y2={inner[i][1]} stroke={stroke} strokeWidth={strokeWidth} />
+        <line key={`c${i}`} x1={ox} y1={oy} x2={inner[i][0]} y2={inner[i][1]} stroke={stroke} strokeWidth={strokeWidth} vectorEffect="non-scaling-stroke" />
       ))}
     </svg>
   );

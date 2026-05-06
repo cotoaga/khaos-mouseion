@@ -1,5 +1,5 @@
 import Link from "next/link";
-import Tesseract from "@/components/Tesseract";
+import AnimatedTesseract from "@/components/AnimatedTesseract";
 
 export default function Home() {
   return (
@@ -13,12 +13,10 @@ export default function Home() {
           height: "min(55vh, 480px)",
         }}
       >
-        <Tesseract
-          size="100%"
-          stroke="var(--green)"
+        <AnimatedTesseract
+          color="#00A86B"
           strokeWidth={1.5}
-          className="tesseract-spin"
-          style={{ display: "block" }}
+          style={{ width: "100%", height: "100%" }}
         />
       </div>
 
