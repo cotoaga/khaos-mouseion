@@ -4,7 +4,7 @@ import { NextResponse, type NextRequest } from 'next/server';
 export async function middleware(request: NextRequest) {
   const { pathname } = request.nextUrl;
 
-  const alwaysPublicRoutes = ['/', '/api/auth/callback', '/pinakes', '/cyril', '/collection'];
+  const alwaysPublicRoutes = ['/', '/api/auth/callback', '/pinakes', '/cyril', '/collection', '/whoami'];
 
   const isAlwaysPublic = alwaysPublicRoutes.some(
     route => pathname === route || pathname.startsWith(route + '/')
