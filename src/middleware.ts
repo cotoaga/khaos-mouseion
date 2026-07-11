@@ -10,7 +10,10 @@ export async function middleware(request: NextRequest) {
     route => pathname === route || pathname.startsWith(route + '/')
   );
 
-  if (isAlwaysPublic || pathname.startsWith('/_next') || pathname.includes('.')) {
+  // Static assets are excluded by the matcher below — no dot-based bypass here.
+  // `pathname.includes('.')` would let any gated route containing a dot
+  // (/vault/report.pdf, /admin/v1.2/) skip auth entirely.
+  if (isAlwaysPublic || pathname.startsWith('/_next')) {
     return NextResponse.next();
   }
 
@@ -24,7 +27,7 @@ export async function middleware(request: NextRequest) {
         getAll() {
           return request.cookies.getAll();
         },
-        setAll(cookiesToSet: Array<{ name: string; value: string; options?: any }>) {
+        setAll(cookiesToSet) {
           cookiesToSet.forEach(({ name, value }) => request.cookies.set(name, value));
           supabaseResponse = NextResponse.next({ request });
           cookiesToSet.forEach(({ name, value, options }) =>
@@ -38,9 +41,13 @@ export async function middleware(request: NextRequest) {
   const { data: { user } } = await supabase.auth.getUser();
 
   if (!user) {
-    const url = request.nextUrl.clone();
-    url.pathname = '/';
-    return NextResponse.redirect(url);
+    const callbackUrl = new URL('/api/auth/callback', request.nextUrl.origin);
+    callbackUrl.searchParams.set('next', pathname);
+    const loginUrl = new URL(
+      process.env.KHAOS_ID_LOGIN_URL ?? 'https://khaos-id.vercel.app/login'
+    );
+    loginUrl.searchParams.set('redirect_to', callbackUrl.toString());
+    return NextResponse.redirect(loginUrl.toString());
   }
 
   return supabaseResponse;

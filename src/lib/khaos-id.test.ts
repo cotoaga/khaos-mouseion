@@ -75,16 +75,38 @@ describe("getVerifiedClaims", () => {
     expect(mockJwtVerify).toHaveBeenCalledWith(
       "eyJ.fake-access-token.fake-sig",
       "jwks-stub",
-      { audience: "authenticated" },
+      {
+        audience: "authenticated",
+        issuer: "https://uwgykeijsejiitwmvzrl.supabase.co/auth/v1",
+      },
     );
   });
 
-  it("propagates verification errors so callers can detect tampered tokens", async () => {
+  it("returns null quietly for an expired token (routine, not an incident)", async () => {
+    mockGetSession.mockResolvedValue({
+      data: { session: { access_token: "expired.token.value" } },
+    });
+    const { errors } = await vi.importActual<typeof import("jose")>("jose");
+    mockJwtVerify.mockRejectedValue(
+      new errors.JWTExpired("token expired", { exp: 1 } as never),
+    );
+    const consoleError = vi.spyOn(console, "error").mockImplementation(() => {});
+    const { getVerifiedClaims } = await import("./khaos-id");
+    await expect(getVerifiedClaims()).resolves.toBeNull();
+    expect(consoleError).not.toHaveBeenCalled();
+  });
+
+  it("returns null but logs loudly on tampered tokens (signature mismatch)", async () => {
     mockGetSession.mockResolvedValue({
       data: { session: { access_token: "tampered.token.value" } },
     });
     mockJwtVerify.mockRejectedValue(new Error("signature mismatch"));
+    const consoleError = vi.spyOn(console, "error").mockImplementation(() => {});
     const { getVerifiedClaims } = await import("./khaos-id");
-    await expect(getVerifiedClaims()).rejects.toThrow("signature mismatch");
+    // Contract: callers must never 500 off the auth seam — tamper is an
+    // ops signal (log drain), not a user-facing exception.
+    await expect(getVerifiedClaims()).resolves.toBeNull();
+    expect(consoleError).toHaveBeenCalledOnce();
+    expect(consoleError.mock.calls[0][0]).toContain("[khaos-id]");
   });
 });
