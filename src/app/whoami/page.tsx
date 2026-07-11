@@ -3,7 +3,10 @@ import { getVerifiedClaims } from "@/lib/khaos-id";
 
 export const dynamic = "force-dynamic";
 
-const KHAOS_ID_LOGIN = "https://khaos-id.vercel.app/login";
+const KHAOS_ID_LOGIN_URL =
+  process.env.KHAOS_ID_LOGIN_URL ?? 'https://khaos-id.vercel.app/login';
+const SITE_URL =
+  process.env.NEXT_PUBLIC_SITE_URL ?? 'https://khaos-mouseion.cotoaga.ai';
 
 function formatValue(value: unknown): string {
   if (value === undefined || value === null) return "—";
@@ -14,7 +17,12 @@ function formatValue(value: unknown): string {
 
 export default async function WhoamiPage() {
   const claims = await getVerifiedClaims();
-  if (!claims) redirect(KHAOS_ID_LOGIN);
+  if (!claims) {
+    const callbackUrl = `${SITE_URL}/api/auth/callback?next=/whoami`;
+    const loginUrl = new URL(KHAOS_ID_LOGIN_URL);
+    loginUrl.searchParams.set('redirect_to', callbackUrl);
+    redirect(loginUrl.toString());
+  }
 
   const expIso =
     typeof claims.exp === "number"
