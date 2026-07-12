@@ -1,12 +1,9 @@
 import { redirect } from "next/navigation";
+import { headers } from "next/headers";
 import { getVerifiedClaims } from "@/lib/khaos-id";
+import { buildLoginRedirect } from "@/lib/login-redirect";
 
 export const dynamic = "force-dynamic";
-
-const KHAOS_ID_LOGIN_URL =
-  process.env.KHAOS_ID_LOGIN_URL ?? 'https://khaos-id.vercel.app/login';
-const SITE_URL =
-  process.env.NEXT_PUBLIC_SITE_URL ?? 'https://khaos-mouseion.cotoaga.ai';
 
 function formatValue(value: unknown): string {
   if (value === undefined || value === null) return "—";
@@ -18,10 +15,11 @@ function formatValue(value: unknown): string {
 export default async function WhoamiPage() {
   const claims = await getVerifiedClaims();
   if (!claims) {
-    const callbackUrl = `${SITE_URL}/api/auth/callback?next=/whoami`;
-    const loginUrl = new URL(KHAOS_ID_LOGIN_URL);
-    loginUrl.searchParams.set('redirect_to', callbackUrl);
-    redirect(loginUrl.toString());
+    // Origin from the live request — preview deploys must round-trip to
+    // themselves, not to the canonical production domain.
+    const h = await headers();
+    const origin = `${h.get("x-forwarded-proto") ?? "https"}://${h.get("host")}`;
+    redirect(buildLoginRedirect("/whoami", origin));
   }
 
   const expIso =

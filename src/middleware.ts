@@ -1,5 +1,6 @@
 import { createServerClient } from '@supabase/ssr';
 import { NextResponse, type NextRequest } from 'next/server';
+import { buildLoginRedirect } from '@/lib/login-redirect';
 
 export async function middleware(request: NextRequest) {
   const { pathname } = request.nextUrl;
@@ -41,13 +42,9 @@ export async function middleware(request: NextRequest) {
   const { data: { user } } = await supabase.auth.getUser();
 
   if (!user) {
-    const callbackUrl = new URL('/api/auth/callback', request.nextUrl.origin);
-    callbackUrl.searchParams.set('next', pathname);
-    const loginUrl = new URL(
-      process.env.KHAOS_ID_LOGIN_URL ?? 'https://khaos-id.vercel.app/login'
+    return NextResponse.redirect(
+      buildLoginRedirect(pathname, request.nextUrl.origin)
     );
-    loginUrl.searchParams.set('redirect_to', callbackUrl.toString());
-    return NextResponse.redirect(loginUrl.toString());
   }
 
   return supabaseResponse;
