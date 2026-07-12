@@ -5,7 +5,7 @@ import { buildLoginRedirect } from '@/lib/login-redirect';
 export async function middleware(request: NextRequest) {
   const { pathname } = request.nextUrl;
 
-  const alwaysPublicRoutes = ['/', '/api/auth/callback', '/pinakes', '/pinakes.json', '/cyril', '/collection', '/whoami'];
+  const alwaysPublicRoutes = ['/', '/api/auth/callback', '/pinakes', '/pinakes.json', '/cyril', '/collection', '/whoami', '/topology'];
 
   const isAlwaysPublic = alwaysPublicRoutes.some(
     route => pathname === route || pathname.startsWith(route + '/')
