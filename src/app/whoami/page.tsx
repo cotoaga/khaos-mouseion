@@ -1,6 +1,7 @@
 import { redirect } from "next/navigation";
 import { headers } from "next/headers";
 import { getVerifiedClaims } from "@/lib/khaos-id";
+import { getTier } from "@/lib/tiers";
 import { buildLoginRedirect } from "@/lib/login-redirect";
 
 export const dynamic = "force-dynamic";
@@ -30,6 +31,7 @@ export default async function WhoamiPage() {
   const rows: Array<[string, string]> = [
     ["sub", formatValue(claims.sub)],
     ["email", formatValue(claims.email)],
+    ["tier", getTier(claims)],
     ["iss", formatValue(claims.iss)],
     ["exp", `${formatValue(claims.exp)} (${expIso})`],
   ];
