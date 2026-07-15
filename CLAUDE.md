@@ -38,3 +38,19 @@ Tests live with their feature. No zero-test green theater. If no test suite exis
 Next.js App Router · TypeScript · Tailwind · Supabase SSR (`lib/supabase/`) · Vercel
 
 Deploy target: `khaos-mouseion.cotoaga.ai`
+
+## Seed Pins
+
+Canonical source: `../khaos-seeds/` (clone `cotoaga/khaos-seeds` alongside this repo).
+
+- **Style Seed:** v2.1 — `../khaos-seeds/seed-style.md`. Layer 1–3 foundation + brand chapters. Apply via brand-axis decision (parked, Q1).
+- **Multiverse Seed:** v1.0 — `../khaos-seeds/seed-multiverse.md`. Layer 0 (Kydroon) + Layer 4 (Cognitive Sovereignty). Doctrine reference; read once, consulted rarely.
+
+Bumping a pinned seed version is an ADR, not a passive sync (see `docs/adr/` when the first one lands).
+
+## Federated Identity (Architecture B)
+
+Mouseion does **not** own identity. The seam is `khaos-id` (ADR-0001). Two rules:
+
+- **No local users/profiles/accounts table.** Per-user data joins to `sub` (UUID) only. If you find yourself reaching for one, stop.
+- **JWT in httpOnly cookie only.** `@supabase/ssr` handles cookies. Browser JS never sees tokens. Verification: `lib/khaos-id.ts` → `getVerifiedClaims()` against `SUPABASE_JWKS_URL`. Unauthenticated visitors to gated routes redirect to `khaos-id.vercel.app/login`.
