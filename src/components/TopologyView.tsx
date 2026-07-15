@@ -11,7 +11,7 @@ import {
   type Topology,
 } from '@/lib/topology';
 
-type LensName = 'themes' | 'bipartite';
+export type LensName = 'themes' | 'bipartite';
 
 interface Selection {
   label: string;
@@ -19,18 +19,27 @@ interface Selection {
   bookIdx: number[];
 }
 
-const WIDTH = 1100;
-const HEIGHT = 720;
+const LENS_CAPTION: Record<LensName, string> = {
+  themes: 'PMI-weighted co-occurrence — edges are chance-corrected',
+  bipartite: 'lift-filtered category–theme edges (≥1.5× expected)',
+};
 
 const KIND_COLOR: Record<string, string> = {
   theme: 'var(--green)',
   category: 'var(--blue)',
 };
 
-export default function TopologyView() {
+export default function TopologyView({
+  lens,
+  width = 1400,
+  height = 820,
+}: {
+  lens: LensName;
+  width?: number;
+  height?: number;
+}) {
   const [books, setBooks] = useState<PinakesBook[] | null>(null);
   const [error, setError] = useState<string | null>(null);
-  const [lens, setLens] = useState<LensName>('themes');
   const [selection, setSelection] = useState<Selection | null>(null);
   const [, setFrame] = useState(0); // render pump for the sim
   const rafRef = useRef<number>(0);
@@ -54,8 +63,8 @@ export default function TopologyView() {
   const sim: SimState | null = useMemo(() => {
     if (!topology) return null;
     const activeLens = lens === 'themes' ? topology.themeLens : topology.bipartiteLens;
-    return initSimulation(activeLens, WIDTH, HEIGHT);
-  }, [topology, lens]);
+    return initSimulation(activeLens, width, height);
+  }, [topology, lens, width, height]);
 
   // physics loop: tick the current sim, pump renders while it is hot
   useEffect(() => {
@@ -102,23 +111,13 @@ export default function TopologyView() {
 
   return (
     <div className="flex flex-col gap-4">
-      <div className="flex items-center gap-3">
-        <LensButton active={lens === 'themes'} onClick={() => { setLens('themes'); setSelection(null); }}>
-          Theme currents
-        </LensButton>
-        <LensButton active={lens === 'bipartite'} onClick={() => { setLens('bipartite'); setSelection(null); }}>
-          Territories × currents
-        </LensButton>
-        <span className="text-xs" style={{ color: 'var(--grey-light)', fontFamily: 'var(--font-mono, monospace)' }}>
-          {lens === 'themes'
-            ? 'PMI-weighted co-occurrence — edges are chance-corrected'
-            : 'lift-filtered category–theme edges (≥1.5× expected)'}
-        </span>
-      </div>
+      <span className="text-xs" style={{ color: 'var(--grey-light)', fontFamily: 'var(--font-mono, monospace)' }}>
+        {LENS_CAPTION[lens]}
+      </span>
 
       <div className="flex gap-4">
         <svg
-          viewBox={`0 0 ${WIDTH} ${HEIGHT}`}
+          viewBox={`0 0 ${width} ${height}`}
           className="min-w-0 flex-1 rounded-lg"
           style={{ background: 'var(--charcoal)', border: '1px solid var(--grey-dark)' }}
           role="img"
@@ -168,8 +167,8 @@ export default function TopologyView() {
         </svg>
 
         <aside
-          className="w-80 shrink-0 overflow-y-auto rounded-lg p-4"
-          style={{ background: 'var(--charcoal)', border: '1px solid var(--grey-dark)', maxHeight: HEIGHT }}
+          className="w-96 shrink-0 overflow-y-auto rounded-lg p-4"
+          style={{ background: 'var(--charcoal)', border: '1px solid var(--grey-dark)', maxHeight: height }}
         >
           {selection && books ? (
             <>
@@ -201,31 +200,5 @@ export default function TopologyView() {
         </aside>
       </div>
     </div>
-  );
-}
-
-function LensButton({
-  active,
-  onClick,
-  children,
-}: {
-  active: boolean;
-  onClick: () => void;
-  children: React.ReactNode;
-}) {
-  return (
-    <button
-      type="button"
-      onClick={onClick}
-      className="rounded px-3 py-1.5 text-sm transition-colors"
-      style={{
-        background: active ? 'var(--green)' : 'var(--grey-dark)',
-        color: active ? 'var(--black)' : 'var(--grey-light)',
-        fontFamily: 'var(--font-space-grotesk, inherit)',
-        fontWeight: 600,
-      }}
-    >
-      {children}
-    </button>
   );
 }
