@@ -75,6 +75,17 @@ export default function Home() {
         </Link>
       </div>
 
+      <Link
+        href="/topology"
+        className="mt-8 text-sm uppercase tracking-widest underline underline-offset-4 transition-opacity hover:opacity-80"
+        style={{
+          fontFamily: "var(--font-space-grotesk)",
+          color: "var(--grey-light)",
+        }}
+      >
+        Explore the Topology
+      </Link>
+
       <footer
         className="mt-24 text-sm"
         style={{ color: "var(--grey)", fontFamily: "var(--font-inter)" }}
