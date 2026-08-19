@@ -54,3 +54,9 @@ Mouseion does **not** own identity. The seam is `khaos-id` (ADR-0001). Two rules
 
 - **No local users/profiles/accounts table.** Per-user data joins to `sub` (UUID) only. If you find yourself reaching for one, stop.
 - **JWT in httpOnly cookie only.** `@supabase/ssr` handles cookies. Browser JS never sees tokens. Verification: `lib/khaos-id.ts` → `getVerifiedClaims()` against `SUPABASE_JWKS_URL`. Unauthenticated visitors to gated routes redirect to `khaos-id.vercel.app/login`.
+
+## Boundaries
+
+Direct production DDL/DML against Supabase is Dev-session or Kurt territory only. Knight fences never include `supabase db query --linked`, `apply_migration`, or any direct write against the production database. Migration files land in `supabase/migrations/` inside the same commit as their code; Dev applies them post-merge and verifies via `execute_sql`.
+
+Prod DB is read-only for you. If the task seems to require prod DDL/DML, comment and stop.
